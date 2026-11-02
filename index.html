@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#064b32">
+  <meta name="description" content="Perisai Muslim 2026 — Himpunan doa dan zikir daripada Al-Quran dan Sunnah.">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon-192.png">
+  <title>Perisai Muslim 2026</title>
+  <style>
+    :root { color-scheme: light; --green:#064b32; --gold:#d5a936; --cream:#fff9e9; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; font-family:system-ui,-apple-system,Segoe UI,sans-serif; background:linear-gradient(160deg,#fdf8e9,#e8f0df); color:#173d2c; }
+    main { width:min(100%,520px); margin:auto; padding:28px 20px 36px; text-align:center; }
+    .icon { width:156px; height:156px; object-fit:cover; border-radius:30px; box-shadow:0 8px 24px #183d2c33; border:3px solid var(--gold); }
+    h1 { margin:18px 0 4px; font-family:Georgia,serif; color:var(--green); font-size:clamp(27px,7vw,36px); }
+    .sub { margin:0 auto 22px; max-width:360px; line-height:1.5; color:#4e5b50; }
+    .panel { background:#fffdf5; border:1px solid #dfc77c; border-radius:22px; padding:20px; box-shadow:0 8px 24px #183d2c12; }
+    .tag { display:inline-block; padding:7px 13px; border-radius:999px; background:#e8f0df; color:var(--green); font-weight:700; font-size:13px; }
+    a.button, button { display:block; width:100%; margin-top:13px; padding:15px 16px; border:0; border-radius:14px; font-size:16px; font-weight:700; text-decoration:none; cursor:pointer; }
+    .primary { background:var(--green); color:white; }
+    .secondary { background:#f4e7bb; color:#274331; border:1px solid #d5b65a; }
+    .note { font-size:13px; line-height:1.5; color:#687168; margin:15px 4px 0; }
+    .status { min-height:20px; margin-top:10px; font-size:13px; color:var(--green); }
+    footer { margin-top:24px; font-size:12px; color:#687168; }
+  </style>
+</head>
+<body>
+<main>
+  <img class="icon" src="./icons/icon-192.png" alt="Ikon Perisai Muslim 2026">
+  <h1>Perisai Muslim 2026</h1>
+  <p class="sub">Himpunan Doa &amp; Zikir daripada Al-Quran dan Sunnah</p>
+  <section class="panel">
+    <span class="tag">KITAB DIGITAL INTERAKTIF</span>
+    <a class="button primary" href="./Perisai-Muslim-Edisi-Kemas-Kini-2026-v5.pdf" id="openBook">Buka Kitab</a>
+    <button class="secondary" id="saveOffline">Simpan untuk bacaan luar talian</button>
+    <p class="note">Isi kandungan PDF boleh ditekan untuk terus ke halaman pilihan. Untuk memasang ikon, buka menu Chrome dan pilih <b>Add to Home screen</b> atau <b>Install app</b>.</p>
+    <div class="status" id="status" role="status"></div>
+  </section>
+  <footer>Inspirasi Rohani ✦ Surau Al-Khairiah, Selayang Permai</footer>
+</main>
+<script>
+  const statusEl = document.getElementById('status');
+  document.getElementById('saveOffline').addEventListener('click', async () => {
+    if (!('serviceWorker' in navigator)) { statusEl.textContent = 'Pelayar ini tidak menyokong simpanan luar talian.'; return; }
+    statusEl.textContent = 'Sedang menyimpan kitab…';
+    try {
+      const cache = await caches.open('perisai-muslim-2026-v1');
+      const response = await fetch('./Perisai-Muslim-Edisi-Kemas-Kini-2026-v5.pdf');
+      if (!response.ok) throw new Error('PDF tidak dapat dimuat turun.');
+      await cache.put('./Perisai-Muslim-Edisi-Kemas-Kini-2026-v5.pdf', response);
+      statusEl.textContent = 'Kitab telah disimpan untuk bacaan luar talian pada peranti ini.';
+    } catch (e) {
+      statusEl.textContent = 'Tidak berjaya. Pastikan PDF telah dimuat naik dan cuba lagi.';
+    }
+  });
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+  }
+  // PWA icon launch can optionally open the PDF immediately when launched with ?open=1.
+  if (new URLSearchParams(location.search).get('open') === '1') {
+    location.replace('./Perisai-Muslim-Edisi-Kemas-Kini-2026-v5.pdf');
+  }
+</script>
+</body>
+</html>
